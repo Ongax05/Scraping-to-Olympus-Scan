@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspose.Imaging" Version="23.10.0" />
+    <PackageReference Include="Aspose.PDF" Version="23.11.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.54" />
   </ItemGroup>
 
