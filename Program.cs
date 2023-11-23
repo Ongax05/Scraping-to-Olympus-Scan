@@ -1,10 +1,12 @@
 ﻿using System.Net;
+using System.Text;
 using WebScraping;
 
 class Program
 {
     static async Task Main(string[] args)
     {
+        Console.OutputEncoding = Encoding.UTF8;
         Console.Clear();
         Console.WriteLine("Dame el link del capitulo base ୧༼ಠ益ಠ༽︻╦╤─");
         var Url = Console.ReadLine();
@@ -36,5 +38,6 @@ class Program
         }
         Console.Clear();
         Console.WriteLine("Hasta pronto ( ´◔ ω◔`) ノシ");
+        Thread.Sleep(3000);
     }
 }

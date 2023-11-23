@@ -63,6 +63,7 @@ namespace WebScraping
             {
                 Console.Clear();
                 Console.Error.WriteLine($"Algo salio mal ಥ﹏ಥ\nError: {ex}");
+                Thread.Sleep(2500);
             }
         }
 
@@ -120,6 +121,7 @@ namespace WebScraping
             {
                 Console.Clear();
                 Console.Error.WriteLine($"Algo salio mal ಥ﹏ಥ\nError: {ex}");
+                Thread.Sleep(2500);
             }
         }
     }

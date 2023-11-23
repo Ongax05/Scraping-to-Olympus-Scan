@@ -12,4 +12,8 @@
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.4.0" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <ApplicationIcon>C:\Users\jhose\Desktop\Scraping-to-Olympus-Scan\Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
 </Project>
