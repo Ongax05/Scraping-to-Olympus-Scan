@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using HtmlAgilityPack;
 using ImageMagick;
 
@@ -30,7 +31,7 @@ namespace WebScraping
                 .SelectNodes("//a")
                 .Where(n => n.GetAttributeValue("name", "").ToString() == "capitulo siguiente")
                 .FirstOrDefault();
-            return "https://olympusv2.gg" + NextCapLink.GetAttributeValue("href", "");
+            return "https://olympusvisor.com" + NextCapLink.GetAttributeValue("href", "");
         }
 
         public static async Task DownloadImgsAsync(string url, string ImgsPath)
@@ -67,6 +68,13 @@ namespace WebScraping
             }
         }
 
+        public static void Zipper (string ImgsPath, string ZipsPath,string Url)
+        {
+            string Title = GetTitle(Url);
+            string zipName = $"{ZipsPath}/{Title}.zip";
+            Console.WriteLine($"Zipping: {zipName}");
+            ZipFile.CreateFromDirectory(ImgsPath,zipName);
+        }
         public static List<string> GetImgNames(string ImgsPath)
         {
             var Directory = new DirectoryInfo(ImgsPath);
@@ -95,7 +103,7 @@ namespace WebScraping
             var Num = TitleSplit[1];
             TitleSplit.RemoveRange(0, 3);
             TitleSplit.RemoveRange(TitleSplit.Count - 3, 3);
-            var Title = $"{string.Join(" ", TitleSplit)} {Num}.pdf";
+            var Title = $"{string.Join(" ", TitleSplit)} {Num}";
             return Title;
         }
 

@@ -21,11 +21,15 @@ class Program
         if (!Path.Exists(PdfsPath))
             Directory.CreateDirectory(PdfsPath);
 
+        var ZipsPath = "./Zips/";
+        if (!Path.Exists(ZipsPath))
+            Directory.CreateDirectory(ZipsPath);
+
         while (true)
         {
             Console.Clear();
             await Scraping.DownloadImgsAsync(Url,ImgsPath);
-            Scraping.CreatePDF(ImgsPath,PdfsPath,Url);
+            Scraping.Zipper(ImgsPath,ZipsPath,Url);
             Scraping.DeleteImgs(ImgsPath);
             Console.Clear();
             Console.WriteLine("Next Chapter (Ծ‸ Ծ)?\n(s/n)");
