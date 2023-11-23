@@ -8,10 +8,10 @@ class Program
     {
         Console.OutputEncoding = Encoding.UTF8;
         Console.Clear();
-        Console.WriteLine("Dame el link del capitulo base ୧༼ಠ益ಠ༽︻╦╤─");
+        Console.WriteLine("Give me the link to the base chapter ୧༼ಠ益ಠ༽︻╦╤─");
         var Url = Console.ReadLine();
         if (Url == null)
-            Console.WriteLine("Link invalido ୧༼ಠ益ಠ༽୨");
+            Console.WriteLine("Invalid link ୧༼ಠ益ಠ༽୨");
 
         var ImgsPath = "./Images/";
         if (!Path.Exists(ImgsPath))
@@ -28,16 +28,16 @@ class Program
             Scraping.CreatePDF(ImgsPath,PdfsPath,Url);
             Scraping.DeleteImgs(ImgsPath);
             Console.Clear();
-            Console.WriteLine("Siguiente Capitulo (Ծ‸ Ծ)?\n(s/n)");
+            Console.WriteLine("Next Chapter (Ծ‸ Ծ)?\n(s/n)");
             var Eleccion = Console.ReadLine() ?? "";
             if (Eleccion.ToLower() != "s")
                 break;
-            Console.WriteLine("Seguiremos trabajando ε/̵͇̿̿/’̿’̿ ̿(◡︵◡)");
-            Thread.Sleep(2500);
+            Console.WriteLine("We will continue to work ε/̵͇̿̿/’̿’̿ ̿(◡︵◡)");
+            Thread.Sleep(3500);
             Url = Scraping.NextLink(Url);
         }
         Console.Clear();
-        Console.WriteLine("Hasta pronto ( ´◔ ω◔`) ノシ");
+        Console.WriteLine("See you soon ( ´◔ ω◔`) ノシ");
         Thread.Sleep(3000);
     }
 }

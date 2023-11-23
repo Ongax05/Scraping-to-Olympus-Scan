@@ -38,7 +38,7 @@ namespace WebScraping
             try
             {
                 Console.Clear();
-                Console.WriteLine("Descargando imagenes ...");
+                Console.WriteLine("Downloading images ...");
                 var Client = new HttpClient();
 
                 var Links = GetLinks(url);
@@ -56,14 +56,14 @@ namespace WebScraping
                     }
                 }
                 Console.Clear();
-                Console.WriteLine("Imagenes descargadas correctamente ( ˘ ³˘)♥");
+                Console.WriteLine("Images downloaded successfully ( ˘ ³˘)♥");
                 Thread.Sleep(2500);
             }
             catch (Exception ex)
             {
                 Console.Clear();
-                Console.Error.WriteLine($"Algo salio mal ಥ﹏ಥ\nError: {ex}");
-                Thread.Sleep(2500);
+                Console.Error.WriteLine($"Something went wrong ಥ﹏ಥ\nError: {ex}");
+                Thread.Sleep(10000);
             }
         }
 
@@ -104,7 +104,7 @@ namespace WebScraping
             try
             {
                 Console.Clear();
-                Console.WriteLine("Creando Pdf ...");
+                Console.WriteLine("Creating Pdf ...");
                 var Imgs = GetImgNames(ImgsPath);
                 var PdfImages = new MagickImageCollection();
                 foreach (var img in Imgs)
@@ -114,14 +114,14 @@ namespace WebScraping
                 string Title = GetTitle(Url);
                 PdfImages.Write($"{PdfsPath + Title}");
                 Console.Clear();
-                Console.WriteLine("Pdf creado correctamente ᕦ(ò_óˇ)ᕤ");
+                Console.WriteLine("Pdf successfully created ᕦ(ò_óˇ)ᕤ");
                 Thread.Sleep(2500);
             }
             catch (Exception ex)
             {
                 Console.Clear();
-                Console.Error.WriteLine($"Algo salio mal ಥ﹏ಥ\nError: {ex}");
-                Thread.Sleep(2500);
+                Console.Error.WriteLine($"Something went wrong ಥ﹏ಥ\nError: {ex}");
+                Thread.Sleep(10000);
             }
         }
     }
