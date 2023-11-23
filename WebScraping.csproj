@@ -16,4 +16,8 @@
     <ApplicationIcon>C:\Users\jhose\Desktop\Scraping-to-Olympus-Scan\Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PublishTrimmed>true</PublishTrimmed>
+  </PropertyGroup>
+
 </Project>
