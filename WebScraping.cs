@@ -1,6 +1,6 @@
+using System.Text.RegularExpressions;
 using HtmlAgilityPack;
-using Aspose.Pdf;
-using Aspose.Imaging;
+using ImageMagick;
 
 namespace WebScraping
 {
@@ -48,8 +48,8 @@ namespace WebScraping
                 var response = await Client.GetAsync(uri);
                 if (response.IsSuccessStatusCode)
                 {
-                    //using var stream = ConvertImageToJpeg(new FileStream(fileName, FileMode.Create));
-                    //await response.Content.CopyToAsync(stream);
+                    using var stream = new FileStream(fileName, FileMode.Create);
+                    await response.Content.CopyToAsync(stream);
                 }
             }
         }
@@ -57,21 +57,36 @@ namespace WebScraping
         public static List<string> GetImgNames(string ImgsPath)
         {
             var Directory = new DirectoryInfo(ImgsPath);
-            var r = Directory.GetFiles().Select(f => f.Name).OrderBy(i=> int.Parse(i[..^4])).ToList();
-            return r;   
+            var r = Directory
+                .GetFiles()
+                .OrderBy(i => int.Parse(i.Name[..^4]))
+                .Select(i => i.FullName)
+                .ToList();
+            return r;
         }
 
-        public static void CreatePDF (string ImgsPath, string PdfsPath, string PdfName)
+        public static string GetTitle (string url)
         {
-            Document pdfDocument = new();
+            var document = Web.Load(url);
+            var PagTitle = document.DocumentNode.SelectSingleNode("//title").InnerHtml.ToString();
+            var TitleSplit = PagTitle.Split(" ").ToList();
+            var Num = TitleSplit[1];
+            TitleSplit.RemoveRange(0, 3);
+            TitleSplit.RemoveRange(TitleSplit.Count - 3, 3);
+            var Title = $"{string.Join(" ",TitleSplit)} {Num}.pdf";
+            return Title;
+        }
+
+        public static void CreatePDF(string ImgsPath, string PdfsPath, string Url)
+        {
             var Imgs = GetImgNames(ImgsPath);
-            for (int i = 0; i < Imgs.Count; i++)
+            var PdfImages = new MagickImageCollection();
+            foreach (var img in Imgs)
             {
-                FileStream ImageStream = new(ImgsPath + Imgs[i], FileMode.Open);
-                pdfDocument.Pages.Add();
-                pdfDocument.Pages[i+1].Resources.Images.Add(ImageStream);
+                PdfImages.Add(img);
             }
-            pdfDocument.Save(PdfsPath + PdfName);
+            var Title = GetTitle(Url);
+            PdfImages.Write($"{PdfsPath + Title}");
         }
     }
 }
