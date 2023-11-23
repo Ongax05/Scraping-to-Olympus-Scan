@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using ImageMagick;
 
@@ -36,21 +35,34 @@ namespace WebScraping
 
         public static async Task DownloadImgsAsync(string url, string ImgsPath)
         {
-            var Client = new HttpClient();
-
-            var Links = GetLinks(url);
-
-            for (int i = 0; i < Links.Count; i++)
+            try
             {
-                var uri = new Uri(Links[i]);
-                var fileName = $"{ImgsPath}{i}.jpg";
+                Console.Clear();
+                Console.WriteLine("Descargando imagenes ...");
+                var Client = new HttpClient();
 
-                var response = await Client.GetAsync(uri);
-                if (response.IsSuccessStatusCode)
+                var Links = GetLinks(url);
+
+                for (int i = 0; i < Links.Count; i++)
                 {
-                    using var stream = new FileStream(fileName, FileMode.Create);
-                    await response.Content.CopyToAsync(stream);
+                    var uri = new Uri(Links[i]);
+                    var fileName = $"{ImgsPath}{i}.jpg";
+
+                    var response = await Client.GetAsync(uri);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        using var stream = new FileStream(fileName, FileMode.Create);
+                        await response.Content.CopyToAsync(stream);
+                    }
                 }
+                Console.Clear();
+                Console.WriteLine("Imagenes descargadas correctamente ( ˘ ³˘)♥");
+                Thread.Sleep(2500);
+            }
+            catch (Exception ex)
+            {
+                Console.Clear();
+                Console.Error.WriteLine($"Algo salio mal ಥ﹏ಥ\nError: {ex}");
             }
         }
 
@@ -65,7 +77,16 @@ namespace WebScraping
             return r;
         }
 
-        public static string GetTitle (string url)
+        public static void DeleteImgs(string ImgsPath)
+        {
+            var Imgs = GetImgNames(ImgsPath);
+            foreach (string Img in Imgs)
+            {
+                File.Delete(Img);
+            }
+        }
+
+        public static string GetTitle(string url)
         {
             var document = Web.Load(url);
             var PagTitle = document.DocumentNode.SelectSingleNode("//title").InnerHtml.ToString();
@@ -73,20 +94,33 @@ namespace WebScraping
             var Num = TitleSplit[1];
             TitleSplit.RemoveRange(0, 3);
             TitleSplit.RemoveRange(TitleSplit.Count - 3, 3);
-            var Title = $"{string.Join(" ",TitleSplit)} {Num}.pdf";
+            var Title = $"{string.Join(" ", TitleSplit)} {Num}.pdf";
             return Title;
         }
 
         public static void CreatePDF(string ImgsPath, string PdfsPath, string Url)
         {
-            var Imgs = GetImgNames(ImgsPath);
-            var PdfImages = new MagickImageCollection();
-            foreach (var img in Imgs)
+            try
             {
-                PdfImages.Add(img);
+                Console.Clear();
+                Console.WriteLine("Creando Pdf ...");
+                var Imgs = GetImgNames(ImgsPath);
+                var PdfImages = new MagickImageCollection();
+                foreach (var img in Imgs)
+                {
+                    PdfImages.Add(img);
+                }
+                string Title = GetTitle(Url);
+                PdfImages.Write($"{PdfsPath + Title}");
+                Console.Clear();
+                Console.WriteLine("Pdf creado correctamente ᕦ(ò_óˇ)ᕤ");
+                Thread.Sleep(2500);
             }
-            var Title = GetTitle(Url);
-            PdfImages.Write($"{PdfsPath + Title}");
+            catch (Exception ex)
+            {
+                Console.Clear();
+                Console.Error.WriteLine($"Algo salio mal ಥ﹏ಥ\nError: {ex}");
+            }
         }
     }
 }

@@ -4,8 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # User-specific files
-*.Images
-*.Pdfs
+/Images
+/Pdfs
 *.rsuser
 *.suo
 *.user

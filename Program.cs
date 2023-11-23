@@ -3,9 +3,13 @@ using WebScraping;
 
 class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
-        var Url = "https://olympusv2.gg/capitulo/33967/comic-elfaharapienta";
+        Console.Clear();
+        Console.WriteLine("Dame el link del capitulo base ୧༼ಠ益ಠ༽︻╦╤─");
+        var Url = Console.ReadLine();
+        if (Url == null)
+            Console.WriteLine("Link invalido ୧༼ಠ益ಠ༽୨");
 
         var ImgsPath = "./Images/";
         if (!Path.Exists(ImgsPath))
@@ -15,7 +19,22 @@ class Program
         if (!Path.Exists(PdfsPath))
             Directory.CreateDirectory(PdfsPath);
 
-        // await Scraping.DownloadImgsAsync(Url, ImgsPath);
-        Console.WriteLine(Scraping.GetTitle(Url));
+        while (true)
+        {
+            Console.Clear();
+            await Scraping.DownloadImgsAsync(Url,ImgsPath);
+            Scraping.CreatePDF(ImgsPath,PdfsPath,Url);
+            Scraping.DeleteImgs(ImgsPath);
+            Console.Clear();
+            Console.WriteLine("Siguiente Capitulo (Ծ‸ Ծ)?\n(s/n)");
+            var Eleccion = Console.ReadLine() ?? "";
+            if (Eleccion.ToLower() != "s")
+                break;
+            Console.WriteLine("Seguiremos trabajando ε/̵͇̿̿/’̿’̿ ̿(◡︵◡)");
+            Thread.Sleep(2500);
+            Url = Scraping.NextLink(Url);
+        }
+        Console.Clear();
+        Console.WriteLine("Hasta pronto ( ´◔ ω◔`) ノシ");
     }
 }
