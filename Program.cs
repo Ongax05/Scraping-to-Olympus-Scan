@@ -18,10 +18,6 @@ class Program
         if (!Path.Exists(ImgsPath))
             Directory.CreateDirectory(ImgsPath);
 
-        var PdfsPath = "./Pdfs/";
-        if (!Path.Exists(PdfsPath))
-            Directory.CreateDirectory(PdfsPath);
-
         var ZipsPath = "./Zips/";
         if (!Path.Exists(ZipsPath))
             Directory.CreateDirectory(ZipsPath);
@@ -31,10 +27,10 @@ class Program
             Directory.CreateDirectory(CbzsPath);
 
         Console.Clear();
-        Console.WriteLine("What type of file do you want (Ծ‸ Ծ)?\n1.Pdf\t2.Zip\t3.cbz");
+        Console.WriteLine("What type of file do you want (Ծ‸ Ծ)?\n1.Zip\t2.cbz");
         string Opt = Console.ReadLine();
 
-        if (Opt is null || !Opt.Equals("1") && !Opt.Equals("2") && !Opt.Equals("3"))
+        if (Opt is null || !Opt.Equals("1") && !Opt.Equals("2"))
         {
             Flag = false;
             Console.Clear();
@@ -50,12 +46,9 @@ class Program
             switch (Opt)
             {
                 case "1":
-                    Scraping.CreatePDF(ImgsPath, PdfsPath, Url);
-                    break;
-                case "2":
                     Scraping.Zipper(ImgsPath, ZipsPath, Url, "zip");
                     break;
-                case "3":
+                case "2":
                     Scraping.Zipper(ImgsPath, CbzsPath, Url, "cbz");
                     break;
             }

@@ -1,6 +1,5 @@
 using System.IO.Compression;
 using HtmlAgilityPack;
-using ImageMagick;
 
 namespace WebScraping
 {
@@ -106,32 +105,6 @@ namespace WebScraping
             TitleSplit.RemoveRange(TitleSplit.Count - 3, 3);
             var Title = $"{string.Join(" ", TitleSplit)} {Num}";
             return Title;
-        }
-
-        public static void CreatePDF(string ImgsPath, string PdfsPath, string Url)
-        {
-            try
-            {
-                Console.Clear();
-                Console.WriteLine("Creating Pdf ...");
-                var Imgs = GetImgNames(ImgsPath);
-                var PdfImages = new MagickImageCollection();
-                foreach (var img in Imgs)
-                {
-                    PdfImages.Add(img);
-                }
-                string Title = GetTitle(Url);
-                PdfImages.Write($"{PdfsPath + Title}.pdf");
-                Console.Clear();
-                Console.WriteLine("Pdf successfully created ᕦ(ò_óˇ)ᕤ");
-                Thread.Sleep(2500);
-            }
-            catch (Exception ex)
-            {
-                Console.Clear();
-                Console.Error.WriteLine($"Something went wrong ಥ﹏ಥ\nError: {ex}");
-                Thread.Sleep(10000);
-            }
         }
     }
 }
