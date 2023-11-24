@@ -1,12 +1,12 @@
 # Olympus Web Scraping Tool
 
-This application is designed to simplify the process of obtaining content from Olympus scan, a platform located at [Olympus](https://olympusvisor.com). The tool takes a chapter URL from Olympus, converts it into a PDF file, and conveniently prompts you to proceed to the next chapter.
+This application is designed to simplify the process of obtaining content from Olympus scan, a platform located at [Olympus](https://olympusvisor.com). The tool takes a chapter URL from Olympus, converts it into a Zip or Cbz file, and conveniently prompts you to proceed to the next chapter.
 
 ## How it Works
 
 1. **Input**: Provide the URL of the Olympus chapter you wish to extract content from.
-2. **Output**: Receive a PDF file containing the content of the specified chapter.
-3. **Prompt for Next Chapter**: After generating the PDF, the tool will inquire if you want to proceed to the next chapter.
+2. **Output**: Receive a Zip or Cbz file containing the content of the specified chapter.
+3. **Prompt for Next Chapter**: After generating the Zip or Cbz, the tool will inquire if you want to proceed to the next chapter.
 
 
 ## New Features in Version 1.3
