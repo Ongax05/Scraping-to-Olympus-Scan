@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <ApplicationIcon>C:\Users\jhose\Desktop\Scraping-to-Olympus-Scan\Icon.ico</ApplicationIcon>
+    <ApplicationIcon>./Icon\Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup>

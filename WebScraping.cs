@@ -46,8 +46,9 @@ namespace WebScraping
 
                 for (int i = 0; i < Links.Count; i++)
                 {
+                    var Num = i < 10 ? $"0{i}" : $"{i}"; 
                     var uri = new Uri(Links[i]);
-                    var fileName = $"{ImgsPath}{i}.jpg";
+                    var fileName = $"{ImgsPath}{Num}.jpg";
 
                     var response = await Client.GetAsync(uri);
                     if (response.IsSuccessStatusCode)
@@ -68,10 +69,10 @@ namespace WebScraping
             }
         }
 
-        public static void Zipper (string ImgsPath, string ZipsPath,string Url)
+        public static void Zipper (string ImgsPath, string ZipsPath,string Url,string Extension)
         {
             string Title = GetTitle(Url);
-            string zipName = $"{ZipsPath}/{Title}.zip";
+            string zipName = $"{ZipsPath}/{Title}.{Extension}";
             Console.WriteLine($"Zipping: {zipName}");
             ZipFile.CreateFromDirectory(ImgsPath,zipName);
         }
@@ -120,7 +121,7 @@ namespace WebScraping
                     PdfImages.Add(img);
                 }
                 string Title = GetTitle(Url);
-                PdfImages.Write($"{PdfsPath + Title}");
+                PdfImages.Write($"{PdfsPath + Title}.pdf");
                 Console.Clear();
                 Console.WriteLine("Pdf successfully created ᕦ(ò_óˇ)ᕤ");
                 Thread.Sleep(2500);
