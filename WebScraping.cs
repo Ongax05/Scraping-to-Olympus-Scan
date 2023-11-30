@@ -10,13 +10,11 @@ namespace WebScraping
         public static List<string> GetLinks(string url)
         {
             var document = Web.Load(url);
-            var imgNodes = document
-                .DocumentNode
-                .SelectNodes(
-                    "//img[contains(@class, 'object-cover rounded-inherit w-full h-full')]"
-                );
+            var imgNodes = document.DocumentNode.SelectNodes(
+                "//img[contains(@class, 'object-cover rounded-inherit w-full h-full')]"
+            );
             string Img1 = imgNodes.First().GetAttributeValue("src", "").ToString();
-            string Nombre = Img1[..^8];
+            string Nombre = Img1[..^16];
             var Links = imgNodes.Select(n => n.GetAttributeValue("src", ""));
             var sortedLinks = Links.Where(l => l.Contains(Nombre));
             return sortedLinks.ToList();
@@ -25,73 +23,76 @@ namespace WebScraping
         public static string NextLink(string url)
         {
             var document = Web.Load(url);
-            var NextCapLink = document
-                .DocumentNode
+            var NextCapLink = document.DocumentNode
                 .SelectNodes("//a")
                 .Where(n => n.GetAttributeValue("name", "").ToString() == "capitulo siguiente")
                 .FirstOrDefault();
             return "https://olympusvisor.com" + NextCapLink.GetAttributeValue("href", "");
         }
 
-        public static async Task DownloadImgsAsync(string url, string ImgsPath)
+        public static async Task<List<byte[]>> DownloadImgsAsync(string url)
         {
             try
             {
                 Console.Clear();
                 Console.WriteLine("Downloading images ...");
                 var Client = new HttpClient();
-
+                List<byte[]> ImagesList = new();
                 var Links = GetLinks(url);
 
                 for (int i = 0; i < Links.Count; i++)
                 {
-                    var Num = i < 10 ? $"0{i}" : $"{i}"; 
                     var uri = new Uri(Links[i]);
-                    var fileName = $"{ImgsPath}{Num}.jpg";
-
                     var response = await Client.GetAsync(uri);
                     if (response.IsSuccessStatusCode)
                     {
-                        using var stream = new FileStream(fileName, FileMode.Create);
-                        await response.Content.CopyToAsync(stream);
+                        var Image = await response.Content.ReadAsByteArrayAsync();
+                        ImagesList.Add(Image);
                     }
                 }
                 Console.Clear();
-                Console.WriteLine("Images downloaded successfully ( ˘ ³˘)♥");
+                Console.WriteLine("Images downloaded successfully");
                 Thread.Sleep(2500);
+                return ImagesList;
             }
             catch (Exception ex)
             {
                 Console.Clear();
                 Console.Error.WriteLine($"Something went wrong ಥ﹏ಥ\nError: {ex}");
                 Thread.Sleep(10000);
+                throw;
             }
         }
 
-        public static void Zipper (string ImgsPath, string ZipsPath,string Url,string Extension)
+        public static void Zipper(
+            string OutputPath,
+            string Url,
+            string Extension,
+            List<byte[]> Images
+        )
         {
-            string Title = GetTitle(Url);
-            string zipName = $"{ZipsPath}/{Title}.{Extension}";
-            Console.WriteLine($"Zipping: {zipName}");
-            ZipFile.CreateFromDirectory(ImgsPath,zipName);
-        }
-        public static List<string> GetImgNames(string ImgsPath)
-        {
-            var Directory = new DirectoryInfo(ImgsPath);
-            var r = Directory
-                .GetFiles()
-                .OrderBy(i => int.Parse(i.Name[..^4]))
-                .Select(i => i.FullName)
-                .ToList();
-            return r;
-        }
-
-        public static void DeleteImgs(string ImgsPath)
-        {
-            var Imgs = GetImgNames(ImgsPath);
-            foreach (string Img in Imgs)
+            try
             {
-                File.Delete(Img);
+                string Title = GetTitle(Url);
+                string zipName = $"{OutputPath}/{Title}.{Extension}";
+                Console.WriteLine($"Zipping: {zipName}");
+                using FileStream fs = new(zipName, FileMode.Create);
+                using ZipArchive archive = new(fs, ZipArchiveMode.Create);
+                for (int i = 0; i < Images.Count; i++)
+                {
+                    var Num = i < 10 ? $"0{i}" : $"{i}";
+                    var entryName = $"{Num}.jpg";
+                    ZipArchiveEntry entry = archive.CreateEntry(entryName);
+                    using Stream entryStream = entry.Open();
+                    entryStream.Write(Images[i], 0, Images[i].Length);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Clear();
+                Console.Error.WriteLine($"Something went wrong ಥ﹏ಥ\nError: {ex}");
+                Thread.Sleep(10000);
+                throw;
             }
         }
 
