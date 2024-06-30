@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Net;
-using System.Text;
-using WebScraping;
+﻿using WebScraping;
 
 class Program
 {

@@ -1,6 +1,3 @@
-using System.IO.Compression;
-using HtmlAgilityPack;
-
 namespace WebScraping
 {
     public class Scraping
