@@ -1,10 +1,13 @@
+using HtmlAgilityPack;
+using System.IO.Compression;
+
 namespace WebScraping
 {
     public class Scraping
     {
-        private static readonly HtmlWeb Web = new();
+        private static readonly  HtmlWeb Web = new();
 
-        public static List<string> GetLinks(string url)
+        public static List<string> GetImgLinks(string url)
         {
             var document = Web.Load(url);
             var imgNodes = document.DocumentNode.SelectNodes(
@@ -17,14 +20,22 @@ namespace WebScraping
             return sortedLinks.ToList();
         }
 
-        public static string NextLink(string url)
+        public static string? NextCapLink(string url)
         {
             var document = Web.Load(url);
             var NextCapLink = document.DocumentNode
                 .SelectNodes("//a")
                 .Where(n => n.GetAttributeValue("name", "").ToString() == "capitulo siguiente")
                 .FirstOrDefault();
-            return "https://olympusvisor.com" + NextCapLink.GetAttributeValue("href", "");
+
+            string URL = "https://leerolymp.com" + NextCapLink.GetAttributeValue("href", "");
+
+            if(URL.Contains("series"))
+            {
+                return null;
+            }
+
+            return URL;
         }
 
         public static async Task<List<byte[]>> DownloadImgsAsync(string url)
@@ -35,7 +46,7 @@ namespace WebScraping
                 Console.WriteLine("Downloading images ...");
                 var Client = new HttpClient();
                 List<byte[]> ImagesList = new();
-                var Links = GetLinks(url);
+                var Links = GetImgLinks(url);
 
                 for (int i = 0; i < Links.Count; i++)
                 {
@@ -103,6 +114,23 @@ namespace WebScraping
             TitleSplit.RemoveRange(TitleSplit.Count - 3, 3);
             var Title = $"{string.Join(" ", TitleSplit)} {Num}";
             return Title;
+        }
+
+        public static int GetAllCapLinksCount (string? url)
+        {
+            ArgumentNullException.ThrowIfNull(url);
+
+            int CapCount = 1;
+            while (true)
+            {
+                url = NextCapLink(url);
+                
+                if (url == null)
+                    break;
+
+                CapCount++;
+            }
+            return CapCount;
         }
     }
 }
